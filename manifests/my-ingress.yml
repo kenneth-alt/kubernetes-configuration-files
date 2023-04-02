@@ -4,7 +4,7 @@ metadata:
   name: my-ingress
 spec:
   rules:
-  - host: ingress-lb-1465351928.us-east-2.elb.amazonaws.com
+  - host: ingress-nginx-453533573.us-east-2.elb.amazonaws.com
     http:
       paths:
       - backend:
