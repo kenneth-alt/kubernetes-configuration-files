@@ -1,0 +1,25 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: ingress-nginx
+  annotations:
+    nginx.ingress.kubernetes.io/rewrite-target: /   # rewrite the path when traffic is forwarded to nginx-svc
+spec:
+  rules:
+  - host: ingress-nginx-453533573.us-east-2.elb.amazonaws.com
+    http:
+      paths:
+      - backend:
+          service:
+            name: nginx-svc
+            port:
+              number: 8080
+        path: /my-app
+        pathType: Exact
+      - backend:
+          service:
+            name: products-svc
+            port:
+              number: 8080
+        path: /my-products
+        pathType: Exact
