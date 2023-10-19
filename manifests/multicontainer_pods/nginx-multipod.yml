@@ -1,0 +1,29 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nginx-deployment
+  labels:
+    app: nginx
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: nginx
+  template:
+    metadata:
+      labels:
+        app: nginx
+    spec:
+      initContainers:
+      - name: db-available
+        image: busybox
+        command: ['sh', '-c', 'until nslookup db-service; do echo waiting for database; sleep 10; done']
+
+      containers:
+      - name: nginx
+        image: nginx
+        ports:
+        - containerPort: 80
+      - name: log-sidecar   # Sidecar container
+        image: busybox
+        command: ['sh', '-c', 'while true; do echo syncing logs; sleep 30; done']

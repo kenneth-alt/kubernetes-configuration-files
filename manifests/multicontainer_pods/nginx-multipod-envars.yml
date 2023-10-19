@@ -1,0 +1,35 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nginx-deployment
+  labels:
+    app: nginx
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: nginx
+  template:
+    metadata:
+      labels:
+        app: nginx
+    spec:
+      containers:
+      - name: nginx
+        image: nginx
+        ports:
+        - containerPort: 80
+      - name: log-sidecar   # Sidecar container
+        image: busybox
+        command: ['sh', '-c']
+        args: 
+        - while true; do 
+            echo syncing logs; 
+            printenv POD_NAME;
+            sleep 30; 
+          done'
+        env:  # exposing pod information to containers via env variables, values will be available inside the container.
+        - name: POD_NAME
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.name 
