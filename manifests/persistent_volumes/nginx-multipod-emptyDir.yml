@@ -1,0 +1,45 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nginx-deployment
+  labels:
+    app: nginx
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: nginx
+  template:
+    metadata:
+      labels:
+        app: nginx
+    spec:
+      containers:
+      - name: nginx
+        image: nginx
+        ports:
+        - containerPort: 80
+        command: ['sh', '-c']
+        args: 
+        - while true 
+            echo "$(date) syncing logs" >> /var/log/app.log; 
+            sleep 10; 
+          done
+          
+        volumeMounts:
+        - name: log-data
+          mountPath: /var/log
+
+      - name: log-sidecar   # Sidecar container
+        image: busybox
+        command: ['sh', '-c']
+        args:
+        - tail -f /var/sidecar-log/app.log
+
+        volumeMounts:
+        - name: log-data
+          mountPath: /var/sidecar-log
+
+    volumes:
+    - name: log-data
+      emptyDir: {}

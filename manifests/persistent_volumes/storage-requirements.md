@@ -21,3 +21,8 @@ Are also volumes (local volumes)
 ## Storage Class
 
 Provisions PV dynamically, when PVC claims it
+
+
+## emptyDir Volume
+
+for multicontainer pods, 
