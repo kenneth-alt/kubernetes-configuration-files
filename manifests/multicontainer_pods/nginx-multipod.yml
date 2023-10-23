@@ -27,3 +27,4 @@ spec:
       - name: log-sidecar   # Sidecar container
         image: busybox
         command: ['sh', '-c', 'while true; do echo syncing logs; sleep 30; done']
+        
