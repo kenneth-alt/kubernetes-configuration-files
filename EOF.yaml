@@ -1,0 +1,36 @@
+cat <<EOF | kubectl apply -f -
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  namespace: default
+  name: jenkins-sa
+rules:
+- apiGroups: [""]
+  resources: ["pods", "services", "secrets", "configmaps"]
+  verbs: ["get", "list", "watch", "create", "update", "patch"]
+- apiGroups: ["apps"]
+  resources: ["deployments", "daemonsets", "replicasets", "persistentvolumeclaims", "statefulsets", "configmaps"]
+  verbs: ["get", "list", "watch", "create", "update", "patch"]
+- apiGroups: ["networking.k8s.io"]
+  resources: ["ingresses"]
+  verbs: ["get", "list", "watch", "create", "update", "patch"]
+EOF
+
+
+cat <<EOF | kubectl apply -f -
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: jenkins-sa
+  namespace: default
+subjects:
+- kind: ServiceAccount
+  name: jenkins-sa
+  namespace: default
+roleRef:
+  kind: Role
+  name: jenkins-sa
+  apiGroup: rbac.authorization.k8s.io
+EOF
+
+
