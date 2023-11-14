@@ -1,6 +1,6 @@
 ## Liveness probe
 
-Tells K8s the status of the container inside the pod. LivenessProbe simply pings the application in time interval to see if it responds, if not k8s will restart the pod.
+Tells K8s the status of the container inside the pod. LivenessProbe simply pings the application endpoint in time interval to see if it responds, if not k8s will restart the pod.
 
 Exec probes
 kubelet executes the specified command to check the health.
